@@ -18,7 +18,7 @@ function useGridContext() {
   }
   const [state, dispatch] = context;
   const GridContextAction = useMemo(()=>contextActions(dispatch), [dispatch]);
-  const GridContextSelector = useMemo(()=>contextSelectors(state),[state]);
+  const GridContextSelector = useMemo(()=>contextSelectors(state), [state]);
   return { state, GridContextAction, GridContextSelector };
 }
 

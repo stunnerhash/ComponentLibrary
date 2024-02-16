@@ -1,9 +1,11 @@
 import './index.css'
-import React, { useEffect } from 'react';
+import React from 'react';
 import Rows from './components/Rows';
 import ColumnHeaders from './components/ColumnHeaders';
-import { GridContextProvider, useGridContext } from './context/grid';
-import { useFilters, useSearch } from './hooks';
+import { PaginationRow } from './components/PaginationRow';
+import { GridContextProvider } from './context/grid';
+import { useFilters, usePagination, useSearch, useSetChildGrid, useSetColumns, useSetData } from './hooks';
+
 const Grid = (props) => {
   return (
     <GridContextProvider>
@@ -12,24 +14,33 @@ const Grid = (props) => {
   );
 }
 
-const GridComponent = ({dataSource = [], columns =[], searchQuery={}, filters = []}) =>{
-  const {GridContextAction} = useGridContext()
+const GridComponent = ({
+  dataSource = [], 
+  columns =[], 
+  searchQuery={}, 
+  filters = {}, 
+  showPaginationRow=false, 
+  pageLimit=100, 
+  paginationRowGenerator,
+  childGrid,
+}) =>{
   useSearch(searchQuery);
   useFilters(filters);
-  useEffect(() => {
-    const setDataAndColumns = () => {
-      GridContextAction.setData(dataSource);
-      GridContextAction.setColumns(columns);
-    };
-    setDataAndColumns();
-  }, [dataSource, columns, GridContextAction]);
+  useSetColumns({columns})
+  useSetChildGrid(childGrid)
+  useSetData({dataSource})
+  const Pagination = usePagination({pageLimit, paginationRowGenerator})
+  
   return(
-    <div className='table-container'>
-      <table className='table'>
-        <ColumnHeaders />
-        <Rows/>
-      </table>
-    </div>
+    <>
+      <div className='table-container'>
+        <table className='table'>
+          <ColumnHeaders />
+          <Rows data={Pagination.currentData}/>
+        </table>
+      </div>
+      {showPaginationRow && <PaginationRow {...Pagination}/>}
+    </>
   )
 }
 

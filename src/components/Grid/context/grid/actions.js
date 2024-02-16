@@ -17,6 +17,9 @@ const contextActions = (dispatch) => {
     filters: (payload) =>{  
       dispatch({type:actionTypes.FILTERS, payload})
     },
+    setChild: (payload)=>{
+      dispatch({type:actionTypes.SET_CHILD_GRID, payload})
+    }
   };
 }
  

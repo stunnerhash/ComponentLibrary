@@ -9,6 +9,13 @@ export const initialState = {
     key:'',
     order:''
   },
+  child:{
+    field:'',
+    columns:[],
+    filters:{},
+    searchQuery:{},
+    scrollHeight:'200px'
+  }
 }
 
 export function contextReducer(state, action){
@@ -66,9 +73,7 @@ export function contextReducer(state, action){
       
     case actionTypes.FILTERS:
       const newFilters = action.payload;
-      console.log("action.payload",action.payload);
       newFilteredData = [...state.data];
-      console.log("newFilters",newFilters)
       for (const key in newFilters) {
         const values = newFilters[key];
         newFilteredData = newFilteredData.filter(data => values.includes(extractNestedValue(data, key)));
@@ -76,6 +81,14 @@ export function contextReducer(state, action){
       return {
         ...state,
         filteredData: newFilteredData
+      }
+    case actionTypes.SET_CHILD_GRID:
+      return{
+        ...state,
+        child:{
+          ...state.child,
+          ...action.payload
+        }
       }
     default:{
       throw new Error (`Unhandled action type: ${action.type}`);

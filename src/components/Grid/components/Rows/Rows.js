@@ -1,11 +1,8 @@
-import { useGridContext } from "../../context/grid";
-import { useSearch } from "../../hooks";
 import Columns from "../Columns/Columns";
-const Rows = () => {
-  const {GridContextSelector} = useGridContext() 
+const Rows = ({data}) => {
   return ( 
     <tbody>
-      {GridContextSelector.filteredData().map((item, index)=>
+      {data?.map((item, index)=>
         <Columns
           key={index}
           data={item}
