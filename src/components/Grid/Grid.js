@@ -14,15 +14,16 @@ const Grid = (props) => {
   );
 }
 
+
 const GridComponent = ({
-  dataSource = [], 
-  columns =[], 
-  searchQuery={}, 
-  filters = {}, 
-  showPaginationRow=false, 
-  pageLimit=100, 
-  paginationRowGenerator,
-  childGrid,
+  dataSource = [], // array of objects
+  columns =[], // array of objects 
+  searchQuery={}, // object {field:'', query:''} 
+  filters = {}, // object {[filterName]:[option1,option2]} - (|| for different options) and (&& for different filters) 
+  pageLimit=100, // integer - max number of rows in a page
+  showPaginationRow=false, // bool to enable paginationRow
+  paginationRowGenerator, //function for paginationRow generator
+  childGrid, // object {field:'', scrollHeight:'200px', columns, filters, searchQuery } where field of child data in dataSource
 }) =>{
   useSearch(searchQuery);
   useFilters(filters);

@@ -6,7 +6,6 @@ const ColumnHeaders = () => {
   return ( 
     <thead>
       <tr>
-        {/* {<th></th>} */}
         {GridContextSelector.columns().map((column, index)=>
           <ColumnHeader
             key={index}

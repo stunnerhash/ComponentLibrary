@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGridContext } from "../context/grid";
 
 const defaultPaginationRowGenerator = ({maxPage, currentPage}) =>{
-  const newPaginationRow = [1,maxPage];
+  const newPaginationRow = [1];
+  if(maxPage>1) newPaginationRow.push(maxPage);
   [0,1,2,5,10,20,50,100,200,500].forEach((item)=>{
     const left = currentPage-item, right = currentPage+item;
     if(!newPaginationRow.includes(left) && newPaginationRow.length<=10 && left>1){

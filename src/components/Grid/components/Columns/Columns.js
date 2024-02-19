@@ -17,7 +17,7 @@ const Columns = ({data = {}}) => {
           <Column
             key={index}
             data={data}
-            rowIndex={index}
+            colIndex={index}
             handleShowChild={handleShowChild}
             {...column}
           />

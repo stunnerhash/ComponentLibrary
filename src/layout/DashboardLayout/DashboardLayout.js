@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Grid from "../../components/Grid";
+// import * as XLSX from 'xlsx';
 
 const ageTemplate = (args) => {
   return (<div> {args.value} </div>)
@@ -28,10 +29,71 @@ const defaultColumns = [
   {field:'address.street', text:'Street', width:'100px', template:()=>{}},
 ]
 
+// const JSONToExcelConverter = ({ jsonData }) => {
+//   const flattenData = (data) => {
+//     let flattenObj = {}
+//     const flattenObject = (obj, prefix = '') => {
+//       for (let key in obj) {
+//         const propName = key; // const propName = prefix ? `${prefix}.${key}` : key;
+//         if(obj[key] && (typeof obj[key] === "object"))
+//           flattenObject(obj[key], propName);
+//         else flattenObj[propName] = obj[key]; 
+//       }
+//       return flattenObj;
+//     };
+//     const flattenedData = data.map(item=>{
+//       flattenObj ={};
+//       return flattenObject(item)
+//     });
+//     return flattenedData;
+//   };
+
+//   const spreadChild = (data, field = '') =>{
+//     if(!field) return data;
+//     const copyData = JSON.parse(JSON.stringify(data));
+//     let newData = [];
+//     copyData.forEach(item=>{
+//       const copyChild = JSON.parse(JSON.stringify(item?.[field]));
+//       const child = copyChild.map((item,index)=>({sno:index, ...item}))
+//       delete item[field];
+//       newData.push(item);
+//       newData.push(...child);
+//     })
+//     console.log(newData);
+//     return newData
+//   }
+//   const convertToExcel = () => {
+//     // Flatten the JSON data
+//     const dataWithChildren = spreadChild(jsonData, 'child')
+//     const flattenedData = flattenData(dataWithChildren);
+//     const ws = XLSX.utils.json_to_sheet(flattenedData);
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+//     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+//     saveExcelFile(excelBuffer, 'output.xlsx');
+//   };
+
+//   const saveExcelFile = (buffer, fileName) => {
+//     const data = new Blob([buffer], { type: 'application/octet-stream' });
+//     const url = window.URL.createObjectURL(data);
+//     const link = document.createElement('a');
+//     link.href = url;
+//     link.setAttribute('download', fileName);
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//   };
+
+//   return (
+//     <div>
+//       <button onClick={convertToExcel}>Convert to Excel</button>
+//     </div>
+//   );
+// };
 const Dashboard = () => {
   const [dataSource] = useState([...bigDataSource]);
-  const [filters, setFilters] = useState({name:['Utkarsh', 'Yash']});
-  
+  const [filters, setFilters] = useState();
+  const [searchQuery, setSearchQuery] = useState();
   return ( 
     <>
       <div className="">
@@ -40,19 +102,21 @@ const Dashboard = () => {
           columns={defaultColumns}
           filters = {filters}
           showPaginationRow={true}
+          searchQuery={searchQuery}
           childGrid={{
-            field:'child',
-            columns:defaultColumns,
-            filters: filters,
-            scrollHeight: '200px'
+            field: 'child',
+            columns: defaultColumns,
+            // filters: filters,
+            scrollHeight: '200px',
           }}
         />
       </div>
-      <button 
-        onClick={()=> setFilters(prev=>{ return {...prev, name:['Utkarsh','Kumar']}; }) }
-      >Filter: Utkarsh or Kumar</button>
-
+      <input id="search" onChange={(e)=>setSearchQuery(({field:'name', query:e.target.value}))}/>
+      <button onClick={()=> setFilters(prev=>{ return {...prev, name:['Utkarsh','Kumar']}; }) } >Filter: Utkarsh or Kumar</button>
       <button onClick={()=> setFilters({})} >Clear filters</button>
+      {/* <JSONToExcelConverter
+        jsonData={bigDataSource}
+      /> */}
     </>
   );
 }

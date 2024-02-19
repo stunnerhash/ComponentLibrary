@@ -16,12 +16,14 @@
 
 th, td {
   border: 1px solid var(--primary);
-  text-align: left;
-  padding: 8px;
+  padding: 10px;
   text-align: center;
 }
 th{
   background-color: var(--secondary);
+  position: sticky;
+  z-index: 2;
+  top: 0;
 }
 .pagination-container{
   margin-top: 5px;

@@ -3,15 +3,16 @@ import { useGridContext } from "../../context/grid";
 
 const ChildGrid = ({data}) =>{
   const { GridContextSelector } = useGridContext() 
-  const {field, columns, scrollHeight, filters, searchQuery } = GridContextSelector.child()
+  const {field, columns, scrollHeight, filters, searchQuery, childGrid } = GridContextSelector.child()
   return (
     <tr style={{height:scrollHeight}}>
-      <td colSpan={columns.length}>
+      <td colSpan={columns.length} className="child-table-container">
         <Grid
           dataSource={data?.[field]}
           columns={columns}
           filters={filters}
           searchQuery={searchQuery}
+          childGrid={childGrid}
         />
       </td>
     </tr>
