@@ -4,6 +4,9 @@ import * as actionTypes from './types'
 export const initialState = {
   data:[],
   filteredData: [],
+  showCheckbox:false,
+  pageLimit:100,
+  currentPage:1,
   columns:[],
   sortOrder:{
     key:'',
@@ -20,16 +23,24 @@ export const initialState = {
     searchQuery:{},
     scrollHeight:'200px'
   },
-  filters:{}
+  filters:{},
+  selectedRows:[],
 }
 
 export function contextReducer(state, action){
   let newFilteredData;
   switch(action.type){
+    case actionTypes.SET:
+      return {
+        ...state,
+        ...action.payload,
+      }
     case actionTypes.SET_DATA:
+      const newData = action.payload.map((item,index)=>({index,...item}));
       return { 
         ...state, 
-        data:[...action.payload],
+        data:newData,
+        selectedRows: Array.from({length:newData.length},()=>false),
       }
     case actionTypes.SET_COLUMNS:
       return {
@@ -49,12 +60,12 @@ export function contextReducer(state, action){
         },
       }
     case actionTypes.SEARCH:
-      newFilteredData = getSearchedData(state.data, action.payload)
+      newFilteredData = getSearchedData(state.data, {...state.search, ...action.payload})
       newFilteredData = getFilteredData(newFilteredData, state.filters)
       return {
         ...state, 
         filteredData: newFilteredData,
-        search: {...action.payload}
+        search: {...state.search, ...action.payload}
       }
     case actionTypes.FILTERS:
       newFilteredData = getSearchedData(state.data, state.search)
@@ -72,6 +83,13 @@ export function contextReducer(state, action){
           ...action.payload
         }
       }
+    case actionTypes.SET_SELECTED_ROWS:
+      let newSelectedRows = [...state.selectedRows];
+      action.payload.forEach(({index, value})=>newSelectedRows[index]=value)
+      return {
+        ...state,
+        selectedRows:newSelectedRows
+      }
     default:{
       throw new Error (`Unhandled action type: ${action.type}`);
     }
@@ -83,7 +101,7 @@ const getSearchedData = (data, searchQuery) =>{
   const {key, query} = searchQuery;
   if(key) newData = data.filter((item)=>{
     const itemValue = extractNestedValue(item, key);
-    return itemValue?.includes(query);
+    return itemValue.toLowerCase()?.includes(query.toLowerCase());
   })
   return newData;
 }

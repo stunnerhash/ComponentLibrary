@@ -4,3 +4,6 @@ export {default as useFilters} from './useFilters'
 export {default as useSetData} from './useSetData'
 export {default as useSetColumns} from "./useSetColumns"
 export {default as useSetChildGrid} from "./useSetChildGrid"
+export {default as useExcelExport} from "./useExcelExport"
+export {default as useExposeMethods} from "./useExposeMethods"
+export {default as useSet} from "./useSet"

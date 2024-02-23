@@ -1,48 +1,59 @@
 import './index.css'
-import React from 'react';
-import Rows from './components/Rows';
-import ColumnHeaders from './components/ColumnHeaders';
-import { PaginationRow } from './components/PaginationRow';
+import React, { forwardRef } from 'react';
 import { GridContextProvider } from './context/grid';
-import { useFilters, usePagination, useSearch, useSetChildGrid, useSetColumns, useSetData } from './hooks';
+import { useExposeMethods, useFilters, useSearch, useSet, useSetChildGrid, useSetColumns, useSetData } from './hooks';
+import { DirectionalLayout } from './layout/DirectionalLayout/DirectionalLayout';
+import Table from './components/Table';
 
-const Grid = (props) => {
-  return (
-    <GridContextProvider>
-      <GridComponent {...props} />
-    </GridContextProvider>
-  );
-}
-
-
-const GridComponent = ({
+const Grid = forwardRef(({
   dataSource = [], // array of objects
   columns =[], // array of objects 
   searchQuery={}, // object {field:'', query:''} 
   filters = {}, // object {[filterName]:[option1,option2]} - (|| for different options) and (&& for different filters) 
   pageLimit=100, // integer - max number of rows in a page
-  showPaginationRow=false, // bool to enable paginationRow
-  paginationRowGenerator, //function for paginationRow generator
   childGrid, // object {field:'', scrollHeight:'200px', columns, filters, searchQuery } where field of child data in dataSource
-}) =>{
+  toolbar, // Your toolbar component, with all injected features
+  pagination, // Your pagination componeont, with all injected features
+  showCheckbox=false, // adds a checkbox column
+  ...rest
+}, ref) => {// selectors, actions, excelExport and other functionality can be accessed through ref
+  return (
+    <GridContextProvider>
+      <GridComponent 
+        dataSource={dataSource}
+        columns={columns}
+        searchQuery={searchQuery}
+        filters={filters}
+        pageLimit={pageLimit}
+        childGrid={childGrid}
+        toolbar={toolbar}
+        showCheckbox={showCheckbox}
+        ref={ref}
+        pagination={pagination}
+        {...rest}
+      />
+    </GridContextProvider>
+  );
+})
+
+const GridComponent = forwardRef(({
+  dataSource, columns, searchQuery, filters, pageLimit, childGrid, toolbar, showCheckbox, pagination,
+}, ref) =>{
+  useExposeMethods(ref)
   useSearch(searchQuery);
   useFilters(filters);
-  useSetColumns({columns})
-  useSetChildGrid(childGrid)
-  useSetData({dataSource})
-  const Pagination = usePagination({pageLimit, paginationRowGenerator})
-  
+  useSetColumns(columns);
+  useSetChildGrid(childGrid);
+  useSetData(dataSource);
+  useSet({showCheckbox})
+  useSet({pageLimit});
   return(
-    <>
-      <div className='table-container'>
-        <table className='table'>
-          <ColumnHeaders />
-          <Rows data={Pagination.currentData}/>
-        </table>
-      </div>
-      {showPaginationRow && <PaginationRow {...Pagination}/>}
-    </>
+    <DirectionalLayout direction='top' content={toolbar}>
+      <DirectionalLayout direction='bottom' content={pagination}>
+        <Table/>
+      </DirectionalLayout>
+    </DirectionalLayout>
   )
-}
+})
 
 export default Grid;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useGridContext } from "../context/grid";
 
-const defaultPaginationRowGenerator = ({maxPage, currentPage}) =>{
+const paginationRowGenerator = ({maxPage, currentPage}) =>{
   const newPaginationRow = [1];
   if(maxPage>1) newPaginationRow.push(maxPage);
   [0,1,2,5,10,20,50,100,200,500].forEach((item)=>{
@@ -17,12 +17,15 @@ const defaultPaginationRowGenerator = ({maxPage, currentPage}) =>{
   return newPaginationRow;
 }
 
-function usePagination({pageLimit, paginationRowGenerator = defaultPaginationRowGenerator}) {
-  const {GridContextSelector} = useGridContext()
-  const [currentPage, setCurrentPage] = useState(1);
+function usePagination() {
+  const {GridContextAction,GridContextSelector} = useGridContext()
+  
   const [currentData, setCurrentData] = useState();
   const [currentPaginationRow, setCurrentPaginationRow] = useState([]);
   const dataLength = useMemo(()=>GridContextSelector.filteredDataLength(),[GridContextSelector])
+
+  const pageLimit = GridContextSelector.get('pageLimit');
+  const currentPage = GridContextSelector.get('currentPage');
   const maxPage = Math.ceil(dataLength / pageLimit);
 
   const getCurrentData = useCallback(() => {
@@ -34,20 +37,21 @@ function usePagination({pageLimit, paginationRowGenerator = defaultPaginationRow
   
   useEffect(() => {
     setCurrentPaginationRow(paginationRowGenerator({maxPage, currentPage}));
-  }, [maxPage, currentPage, paginationRowGenerator]);
+  }, [maxPage, currentPage]);
 
   useEffect(() => {
     getCurrentData()
-  }, [getCurrentData, currentPage]);
+  }, [getCurrentData]);
+  
   function next() {
-    setCurrentPage((currentPage) => Math.min(currentPage + 1, maxPage));
+    GridContextAction.set({currentPage: Math.min(currentPage + 1, maxPage)})
   }
   function prev() {
-    setCurrentPage((currentPage) => Math.max(currentPage - 1, 1));
+    GridContextAction.set({currentPage: Math.max(currentPage - 1, 1)})
   }
   function jump(page) {
     const pageNumber = Math.max(1, page);
-    setCurrentPage(() => Math.min(pageNumber, maxPage));
+    GridContextAction.set({currentPage: Math.min(pageNumber, maxPage)})
   }
 
   return { next, prev, jump, currentData, currentPage, maxPage, currentPaginationRow };

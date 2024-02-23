@@ -7,7 +7,7 @@ const ColumnHeader = ({field,text, width}) => {
     const {key, order} = GridContextSelector.sortOrder();
     if(key === field) return (order === "asc" ? "↑" : "↓");
   }, [field, GridContextSelector])
-
+  
   const handleSort = () =>{
     GridContextAction.sort({key:field})
   }

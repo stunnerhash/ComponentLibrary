@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useGridContext } from "../context/grid";
 
-const useSetData = ({dataSource}) =>{
+const useSetData = (dataSource) =>{
   const {GridContextAction} = useGridContext()
   useEffect(() => {
     GridContextAction.setData(dataSource);

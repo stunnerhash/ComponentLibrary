@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useGridContext } from "../../context/grid";
 import Column from "./Column";
 import ChildGrid from "../ChildGrid";
+import CheckboxColumn from "./CheckboxColumn";
 
 const Columns = ({data = {}}) => {
   const { GridContextSelector } = useGridContext() 
@@ -13,6 +14,7 @@ const Columns = ({data = {}}) => {
   return (
     <>
       <tr>
+        {GridContextSelector.get('showCheckbox') && <CheckboxColumn dataIndex={data.index}/>}
         {GridContextSelector.columns().map((column,index)=>(
           <Column
             key={index}

@@ -1,11 +1,14 @@
 import { useGridContext } from "../../context/grid";
+import CheckboxHeader from "./CheckboxHeader";
 import ColumnHeader from "./ColumnHeader";
 
 const ColumnHeaders = () => {
-  const {GridContextSelector} = useGridContext() 
+  const {GridContextSelector} = useGridContext()
+
   return ( 
     <thead>
       <tr>
+        {GridContextSelector.get('showCheckbox') && <CheckboxHeader/>}
         {GridContextSelector.columns().map((column, index)=>
           <ColumnHeader
             key={index}
@@ -16,4 +19,5 @@ const ColumnHeaders = () => {
     </thead>
   );
 }
+
 export default ColumnHeaders;

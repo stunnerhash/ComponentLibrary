@@ -1,6 +1,7 @@
+import { usePagination } from "../../hooks";
 
-
-const PaginationRow = ({prev, next, jump, currentPage, currentPaginationRow})=>{
+const PaginationRow = ()=>{
+  const {prev, next, jump, currentPage, currentPaginationRow} = usePagination();
   return (
     <div className="pagination-container">
       <button className="pagination-button" onClick={prev}>prev</button>

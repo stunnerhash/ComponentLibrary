@@ -6,6 +6,7 @@ const ChildGrid = ({data}) =>{
   const {field, columns, scrollHeight, filters, searchQuery, childGrid } = GridContextSelector.child()
   return (
     <tr style={{height:scrollHeight}}>
+      {GridContextSelector.get('showCheckbox') && <td></td>}
       <td colSpan={columns.length} className="child-table-container">
         <Grid
           dataSource={data?.[field]}

@@ -1,8 +1,11 @@
+import { usePagination } from "../../hooks";
 import Columns from "../Columns/Columns";
-const Rows = ({data}) => {
+
+const Rows = () => {
+  const {currentData} = usePagination();
   return ( 
     <tbody>
-      {data?.map((item, index)=>
+      {currentData?.map((item, index)=>
         <Columns
           key={index}
           data={item}
