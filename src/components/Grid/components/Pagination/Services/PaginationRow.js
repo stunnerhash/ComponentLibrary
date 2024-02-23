@@ -1,9 +1,13 @@
-import { usePagination } from "../../hooks";
+import { usePagination } from "../../../hooks";
 
-const PaginationRow = ()=>{
+const props ={
+
+}
+
+const PaginationRowWithConfig = ()=>{
   const {prev, next, jump, currentPage, currentPaginationRow} = usePagination();
   return (
-    <div className="pagination-container">
+    <div className="pagination-row-container">
       <button className="pagination-button" onClick={prev}>prev</button>
         {currentPaginationRow.map((item, index) => (
             <button 
@@ -17,4 +21,6 @@ const PaginationRow = ()=>{
     </div>
   )
 }
-export default PaginationRow;
+export default function PaginationRow (args=props){
+  return PaginationRowWithConfig.bind(this,{...props, ...args})
+};

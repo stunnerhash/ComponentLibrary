@@ -90,6 +90,11 @@ export function contextReducer(state, action){
         ...state,
         selectedRows:newSelectedRows
       }
+    case actionTypes.RESET:
+      return {
+        ...state,
+        selectedRows:Array.from({length:state.data.length},()=>false),
+      }
     default:{
       throw new Error (`Unhandled action type: ${action.type}`);
     }

@@ -1,6 +1,6 @@
-const Pagination = ({inject, className=''}) =>{
+const Pagination = ({inject, className='pagination-container'}) =>{
   return (
-    <div className={className}>
+    <div className={className} >
       {inject.map((PaginationItem, index)=><PaginationItem key={index}/>)}
     </div>
   )

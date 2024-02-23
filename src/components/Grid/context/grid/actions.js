@@ -13,18 +13,24 @@ const contextActions = (dispatch) => {
     }, 
     sort: (payload) =>{
       dispatch({type: actionTypes.SORT, payload});
+      dispatch({type:actionTypes.RESET})
     },
     search: (payload) =>{
       dispatch({type:actionTypes.SEARCH, payload})
+      dispatch({type:actionTypes.RESET})
     },
     filters: (payload) =>{  
       dispatch({type:actionTypes.FILTERS, payload})
+      dispatch({type:actionTypes.RESET})
     },
     setChild: (payload)=>{
       dispatch({type:actionTypes.SET_CHILD_GRID, payload})
     },
     setSelectedRows: (payload)=>{
       dispatch({type:actionTypes.SET_SELECTED_ROWS, payload})
+    },
+    reset:()=>{
+      dispatch({type:actionTypes.RESET})
     }
   };
 }

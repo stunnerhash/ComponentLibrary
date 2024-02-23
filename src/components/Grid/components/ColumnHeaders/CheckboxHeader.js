@@ -12,7 +12,7 @@ const CheckboxHeader = () =>{
     GridContextAction.setSelectedRows(selectedRows);
   }
   const checked = useMemo(()=>{
-    const checked = currentData?.reduce((acc, data)=> acc && GridContextSelector.getSelectedRowValue(data.index), true) 
+    const checked = currentData?.reduce((acc, data)=> acc && GridContextSelector.selectedRowValue(data.index), true) 
     return !!checked;
   }, [currentData, GridContextSelector]);
   return (

@@ -25,7 +25,18 @@ th{
   z-index: 2;
   top: 0;
 }
+.page-limit{
+  /* background-color: #ccc; */
+  border: 1px solid #aaa;
+  /* outline: none; */
+}
 .pagination-container{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 5px;
+}
+.pagination-row-container{
   margin-top: 5px;
   display:flex; 
   justify-content:center

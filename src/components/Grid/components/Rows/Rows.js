@@ -5,9 +5,9 @@ const Rows = () => {
   const {currentData} = usePagination();
   return ( 
     <tbody>
-      {currentData?.map((item, index)=>
+      {currentData?.map((item)=>
         <Columns
-          key={index}
+          key={item.index}
           data={item}
         />
       )}

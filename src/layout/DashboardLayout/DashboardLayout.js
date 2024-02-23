@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import Grid from "../../components/Grid";
 import Toolbar, { Download, Search } from "../../components/Grid/components/Toolbar";
-import Pagination, { PaginationRow } from "../../components/Grid/components/PaginationRow";
+import Pagination, { PageLimit, PaginationRow } from "../../components/Grid/components/Pagination";
 
 const ageTemplate = (args) => {
   return (<div> {args.value} </div>)
@@ -36,10 +36,15 @@ const Dashboard = () => {
   const [filters, setFilters] = useState();
   const [searchQuery] = useState({field:'name'});
   const gridRef = useRef();
-  const getGridSelector = (ref) => console.log(ref.current);
+  
   const ApplyFilters = () =>( <button onClick={()=> setFilters(prev=>({...prev, name:['Utkarsh','Kumar']})) }> Filter: Utkarsh or Kumar </button> )
   const ClearFilters = () =>( <button onClick={()=> setFilters({})} >Clear filters</button> )
-  const GridSelector = () =>( <button onClick={()=> getGridSelector(gridRef)} >grid selector</button> )
+  const GridSelector = () =>( 
+    <button onClick={()=> {
+      console.log(gridRef.current)
+      console.log(gridRef.current.selector.selectedRowsData())
+    }}>grid selector</button> 
+  )
 
   return (
     <>
@@ -55,8 +60,9 @@ const Dashboard = () => {
             scrollHeight: '200px',
           }}
           showCheckbox={true}
-          toolbar={<Toolbar inject={[ExcelExport(gridRef),GridSelector, ApplyFilters, ClearFilters, Download, Search]}/>}
-          pagination={<Pagination inject={[PaginationRow]}/>}
+          pageLimit={10}
+          toolbar={<Toolbar className='toolbar-container' inject={[ExcelExport(gridRef),GridSelector, ApplyFilters, ClearFilters, Download(), Search()]}/>}
+          pagination={<Pagination inject={[PageLimit(),PaginationRow()]}/>}
           ref={gridRef}
         />
       </div>
@@ -64,6 +70,7 @@ const Dashboard = () => {
   );
 }
 
+
 export default Dashboard;
 
-// set toolbar and pagination directions 
+// reset selected, child does not go away on sorting

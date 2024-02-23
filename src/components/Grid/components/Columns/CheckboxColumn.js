@@ -4,7 +4,7 @@ import { useGridContext } from "../../context/grid";
 const CheckboxColumn = ({dataIndex}) =>{
   const id = useId();
   const {GridContextAction, GridContextSelector} = useGridContext()
-  const checked = useMemo(()=>GridContextSelector.getSelectedRowValue(dataIndex),[GridContextSelector,dataIndex])
+  const checked = useMemo(()=>GridContextSelector.selectedRowValue(dataIndex),[GridContextSelector,dataIndex])
   const handleCheckbox = (e) =>{
     GridContextAction.setSelectedRows([{index:dataIndex, value:e.target.checked}])
   }

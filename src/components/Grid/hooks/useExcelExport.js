@@ -15,12 +15,11 @@ const useExcelExport = () =>{
   const childGrid = GridContextSelector.child()
   const filteredData = GridContextSelector.filteredData();
   const contextColumns = GridContextSelector.columns();
-
-  const excelExport = ({showChild = true, columns})=>{
+  const excelExport = ({showChild = true, columns = contextColumns})=>{
     const flattenedData = flattenArrayOfObjects(filteredData);
     if(!showChild) deleteFieldsFromArray({data:flattenedData, fields:[childGrid.field]})
-    const aoa = convertJsonToAoa(flattenedData, (columns || contextColumns), childGrid);
-    const excelBuffer = convertToExcel(aoa); 
+    const aoa = convertJsonToAoa(flattenedData, columns, childGrid);
+    const excelBuffer = convertToExcel(aoa);
     downloadExcelFile(excelBuffer, 'output.xlsx');
   }
   return excelExport;

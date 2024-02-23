@@ -43,15 +43,24 @@ function usePagination() {
     getCurrentData()
   }, [getCurrentData]);
   
+  const reset = (currentPage, newCurrentPage) =>{
+    if(currentPage !== newCurrentPage) GridContextAction.reset();
+  }
   function next() {
-    GridContextAction.set({currentPage: Math.min(currentPage + 1, maxPage)})
+    const newCurrentPage = Math.min(currentPage + 1, maxPage);
+    reset(currentPage, newCurrentPage);
+    GridContextAction.set({currentPage: newCurrentPage})
   }
   function prev() {
-    GridContextAction.set({currentPage: Math.max(currentPage - 1, 1)})
+    const newCurrentPage = Math.max(currentPage - 1, 1);
+    reset(currentPage, newCurrentPage);
+    GridContextAction.set({currentPage: newCurrentPage})
   }
   function jump(page) {
     const pageNumber = Math.max(1, page);
-    GridContextAction.set({currentPage: Math.min(pageNumber, maxPage)})
+    const newCurrentPage = Math.min(pageNumber, maxPage);
+    reset(currentPage, newCurrentPage);
+    GridContextAction.set({currentPage: newCurrentPage})
   }
 
   return { next, prev, jump, currentData, currentPage, maxPage, currentPaginationRow };

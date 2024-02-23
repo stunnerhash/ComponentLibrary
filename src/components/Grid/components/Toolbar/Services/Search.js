@@ -1,8 +1,12 @@
 import { useGridContext } from "../../../context/grid";
 
-const Search = () =>{
+const props ={
+
+}
+
+const SearchWithConfig = () =>{
   const {GridContextAction} = useGridContext()
-  const handleSearch=(e)=>{
+  const handleSearch = (e)=>{
     const { value } = e.target;
     GridContextAction.search({query: value})
   }
@@ -13,4 +17,6 @@ const Search = () =>{
     </span>
   )
 }
-export default Search;
+export default function Search(args=props){
+  return SearchWithConfig.bind(this, {...props, ...args})
+};
