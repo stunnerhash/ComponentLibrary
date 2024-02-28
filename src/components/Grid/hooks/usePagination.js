@@ -36,8 +36,9 @@ function usePagination() {
   },[currentPage, pageLimit, GridContextSelector])
   
   useEffect(() => {
+    if(currentPage>maxPage) GridContextAction.set({currentPage: 1})
     setCurrentPaginationRow(paginationRowGenerator({maxPage, currentPage}));
-  }, [maxPage, currentPage]);
+  }, [maxPage, currentPage, GridContextAction]);
 
   useEffect(() => {
     getCurrentData()

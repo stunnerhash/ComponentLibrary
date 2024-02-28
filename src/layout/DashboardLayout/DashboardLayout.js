@@ -1,11 +1,10 @@
+// import Grid from "@stunnerhash/grid";
 import { useRef, useState } from "react";
 import Grid from "../../components/Grid";
 import Toolbar, { Download, Search } from "../../components/Grid/components/Toolbar";
 import Pagination, { PageLimit, PaginationRow } from "../../components/Grid/components/Pagination";
+const ageTemplate = (args) => (<div> {args.value} </div>)
 
-const ageTemplate = (args) => {
-  return (<div> {args.value} </div>)
-}
 const defaultDataSource = [
   {name:"Utkarsh", age:40, address:{houseNo:'1', street:''}, child:[{name:"utkarsh"}]},
   {name:"Kumar", age:30, address:{houseNo:'2', street:'sikandra road'}, child:[{name:"rajan"}]},
@@ -15,10 +14,12 @@ const defaultDataSource = [
   {name:"Chawla", age:30, address:{houseNo:'3', street:'🔴💡'}},
   {name:"Kapil", age:20, address:{houseNo:'2', street:''}},
 ]
+
 let bigDataSource = [];
 for(let i = 0;i<30;i++){
   bigDataSource.push(...defaultDataSource.map(item=>({...item, child:defaultDataSource})));
 }
+
 const defaultColumns = [
   {field:'name',text:'Name', width:'20px', },
   {field:'age', text:'Age', width:'50px',name: 'age', template: ageTemplate},
@@ -29,7 +30,6 @@ const defaultColumns = [
   {field:'address.houseNo', text:'House No', width:'100px', template:()=>{}},
   {field:'address.street', text:'Street', width:'100px', template:()=>{}},
 ]
-
 const ExcelExport = (gridRef) => () =>(<button onClick={()=> gridRef.current.excelExport({showChild:false, columns: defaultColumns})}> Excel export </button> )
 const Dashboard = () => {
   const [dataSource] = useState([...bigDataSource]);
@@ -61,8 +61,16 @@ const Dashboard = () => {
           }}
           showCheckbox={true}
           pageLimit={10}
-          toolbar={<Toolbar className='toolbar-container' inject={[ExcelExport(gridRef),GridSelector, ApplyFilters, ClearFilters, Download(), Search()]}/>}
-          pagination={<Pagination inject={[PageLimit(),PaginationRow()]}/>}
+          toolbar={
+            <Toolbar 
+              className='toolbar-container' 
+              inject={[ ExcelExport(gridRef), GridSelector, ApplyFilters, ClearFilters, Download(), Search() ]}  
+            />}
+          pagination={
+            <Pagination 
+              className="pagination-container"
+              inject={[ PageLimit(), PaginationRow()]}
+            />}
           ref={gridRef}
         />
       </div>
